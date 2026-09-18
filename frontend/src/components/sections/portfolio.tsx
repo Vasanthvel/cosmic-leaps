@@ -13,22 +13,22 @@ export function Portfolio() {
   return (
     <Section
       id="portfolio"
-      className="bg-[var(--surface)]"
+      className="bg-[rgba(5,11,25,0.10)]"
     >
       <div className="mx-auto max-w-3xl text-center">
-        <span className="inline-flex rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-sm font-medium text-[var(--brand-navy)]">
+        <span className="inline-flex rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white/90">
           {portfolioContent.badge}
         </span>
 
-        <h2 className="mt-6 text-4xl font-bold tracking-tight text-[var(--text-primary)] md:text-5xl">
+        <h2 className="mt-6 text-4xl font-bold tracking-tight text-white md:text-5xl">
           {portfolioContent.title}
 
-          <span className="block text-[var(--brand-navy)]">
+          <span className="block text-[#f0c77c]">
             {portfolioContent.highlight}
           </span>
         </h2>
 
-        <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-[var(--text-secondary)]">
+        <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-slate-200">
           {portfolioContent.description}
         </p>
       </div>
@@ -52,7 +52,7 @@ export function Portfolio() {
             <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-white/80">
               These portfolio examples represent the types of business
               solutions Cosmic Leaps develops. Every engagement is
-              tailored to the client's objectives, business processes,
+              tailored to the client&apos;s objectives, business processes,
               users and technical requirements.
             </p>
           </div>

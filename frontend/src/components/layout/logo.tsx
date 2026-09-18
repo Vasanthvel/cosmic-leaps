@@ -3,14 +3,16 @@ import Link from "next/link";
 
 interface LogoProps {
   className?: string;
+  href?: string;
 }
 
 export function Logo({
   className = "",
+  href = "/",
 }: LogoProps) {
   return (
     <Link
-      href="/#hero"
+      href={href}
       aria-label="Cosmic Leaps Home"
       className={`flex flex-shrink-0 items-center transition-transform duration-300 hover:scale-[1.02] ${className}`}
     >

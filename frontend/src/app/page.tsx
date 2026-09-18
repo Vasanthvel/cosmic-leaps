@@ -11,7 +11,7 @@ import {
 
 export default function HomePage() {
   return (
-    <main className="bg-white">
+    <main className="bg-transparent">
       <Hero />
 
       <Services />

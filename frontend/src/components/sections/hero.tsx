@@ -17,19 +17,19 @@ export function Hero() {
       <HeroBackground />
 
       <div className="mx-auto max-w-3xl text-center">
-        <span className="inline-flex rounded-full border border-[#E5E7EB] bg-[#F8FAFC] px-4 py-2 text-sm font-medium text-[#1E2A5A]">
+        <span className="inline-flex rounded-full border border-white/15 bg-white/8 px-4 py-2 text-sm font-medium text-white/90">
           {heroData.badge}
         </span>
 
-        <h1 className="mt-8 text-5xl font-bold tracking-tight text-[var(--text-primary)] md:text-6xl">
+        <h1 className="mt-8 text-5xl font-bold tracking-tight text-white md:text-6xl">
           {heroData.title}
 
-          <span className="block text-[var(--brand-navy)]">
+          <span className="block text-[#f0c77c]">
             {heroData.highlight}
           </span>
         </h1>
 
-        <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-[var(--text-secondary)]">
+        <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-slate-200">
           {heroData.description}
         </p>
 

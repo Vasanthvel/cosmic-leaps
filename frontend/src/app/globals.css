@@ -39,21 +39,69 @@ html {
 }
 
 body {
-  background: var(--background);
+  position: relative;
+  isolation: isolate;
+  background-color: #081420;
+  background-image: linear-gradient(rgba(4, 10, 20, 0.45), rgba(4, 10, 20, 0.28)), url("/background.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  overflow-x: hidden;
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
+.cosmic-scene {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.cosmic-scene canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.site-shell {
+  position: relative;
+  z-index: 20;
+}
+
 body,
 button,
-a,
 input,
 textarea,
 select {
   color: var(--text-primary);
 }
+
+header nav a,
+header nav button,
+footer a,
+footer p,
+footer nav a {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+header nav a:hover,
+footer a:hover,
+footer nav a:hover {
+  color: #f0c77c;
+}
+
+header nav a[aria-current="page"] {
+  color: #ffffff;
+}
+
 
 section {
   scroll-margin-top: 96px;

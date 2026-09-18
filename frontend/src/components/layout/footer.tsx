@@ -7,13 +7,13 @@ import { Logo } from "./logo";
 
 export function Footer() {
   return (
-    <footer className="border-t border-[var(--border)] bg-[var(--background)]">
+    <footer className="border-t border-white/10 bg-[rgba(6,12,24,0.16)]">
       <Container>
         <div className="flex flex-col gap-10 py-12 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <Logo />
 
-            <p className="mt-4 max-w-md text-sm leading-7 text-[var(--text-secondary)]">
+            <p className="mt-4 max-w-md text-sm leading-7 text-white/75">
               Premium software consulting company specializing in Website &
               Web Application Development, AI Solutions and Custom Analytics
               Platforms.
@@ -28,7 +28,7 @@ export function Footer() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="text-sm text-[var(--text-secondary)] transition-colors hover:text-[var(--brand-green)]"
+                className="text-sm text-white/75 transition-colors hover:text-[#f0c77c]"
               >
                 {item.label}
               </Link>
@@ -36,7 +36,7 @@ export function Footer() {
           </nav>
         </div>
 
-        <div className="border-t border-[var(--border)] py-6 text-center text-sm text-[var(--text-muted)]">
+        <div className="border-t border-white/10 py-6 text-center text-sm text-white/65">
           © {new Date().getFullYear()} {siteConfig.companyName}. All rights
           reserved.
         </div>

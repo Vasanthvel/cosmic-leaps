@@ -14,7 +14,7 @@ export function Navbar() {
   const activeSection = useActiveSection();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--background)]/90 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-[rgba(6,12,24,0.62)]">
       <Container>
         <div className="flex h-28 items-center justify-between">
           <Logo />
@@ -35,8 +35,8 @@ export function Navbar() {
                   className={[
                     "relative text-sm font-medium transition-colors duration-200",
                     isActive
-                      ? "text-[var(--brand-navy)]"
-                      : "text-[var(--text-secondary)] hover:text-[var(--brand-navy)]",
+                      ? "text-white"
+                      : "text-slate-200 hover:text-[#f0c77c]",
                   ].join(" ")}
                 >
                   {item.label}
@@ -55,7 +55,7 @@ export function Navbar() {
           <div className="hidden lg:block">
             <Button
               asChild
-              className="!border-[1.5px] !border-[var(--brand-navy)] !bg-white !text-[var(--brand-navy)] shadow-[0_8px_20px_rgba(30,42,90,0.12)] transition-all duration-300 ease-out hover:!-translate-y-0.5 hover:!border-[var(--brand-green)] hover:!bg-[var(--brand-green)] hover:!text-white hover:shadow-[0_12px_24px_rgba(76,175,80,0.22)] active:scale-[0.98]"
+              className="!border-[1.5px] !border-white/20 !bg-white/95 !text-[var(--brand-navy)] shadow-[0_8px_20px_rgba(30,42,90,0.12)] transition-all duration-300 ease-out hover:!-translate-y-0.5 hover:!border-[var(--brand-green)] hover:!bg-[var(--brand-green)] hover:!text-white hover:shadow-[0_12px_24px_rgba(76,175,80,0.22)] active:scale-[0.98]"
             >
               <Link href="#contact">
                 Contact Us

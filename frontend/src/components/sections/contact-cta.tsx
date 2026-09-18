@@ -11,12 +11,12 @@ export function ContactCTA() {
   return (
     <Section
       id="contact"
-      className="bg-[var(--surface)]"
+      className="bg-[rgba(5,11,25,0.10)]"
     >
       <div className="overflow-hidden rounded-3xl border border-[#E5E7EB] bg-[#1E2A5A] shadow-[0_24px_60px_rgba(17,24,39,0.08)]">
         <div className="px-8 py-16 lg:px-16">
           <div className="mx-auto max-w-3xl text-center">
-            <span className="inline-flex rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-white/90 backdrop-blur-sm">
+            <span className="inline-flex rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-white/90">
               {contactCTA.badge}
             </span>
 

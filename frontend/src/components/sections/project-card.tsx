@@ -26,13 +26,16 @@ export function ProjectCard({
   const [isOpen, setIsOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(0);
 
-  useEffect(() => {
-    if (!isOpen) {
+  const handleToggle = () => {
+    setIsOpen((open) => {
+      const nextOpen = !open;
       setVisibleCount(0);
-      return;
-    }
+      return nextOpen;
+    });
+  };
 
-    if (visibleCount >= project.approach.length) {
+  useEffect(() => {
+    if (!isOpen || visibleCount >= project.approach.length) {
       return;
     }
 
@@ -45,7 +48,7 @@ export function ProjectCard({
 
   return (
     <Card
-      onClick={() => setIsOpen((open) => !open)}
+      onClick={handleToggle}
       className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--brand-navy)] hover:shadow-xl"
     >
       <CardContent className="flex h-full flex-col p-8">

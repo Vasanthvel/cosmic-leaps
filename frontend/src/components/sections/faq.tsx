@@ -15,22 +15,22 @@ export function FAQ() {
   return (
     <Section
       id="faq"
-      className="bg-[var(--background)]"
+      className="bg-[rgba(5,11,25,0.10)]"
     >
       <div className="mx-auto max-w-3xl text-center">
-        <span className="inline-flex rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-sm font-medium text-[var(--brand-navy)]">
+        <span className="inline-flex rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white/90">
           {faqContent.badge}
         </span>
 
-        <h2 className="mt-6 text-4xl font-bold tracking-tight text-[var(--text-primary)] md:text-5xl">
+        <h2 className="mt-6 text-4xl font-bold tracking-tight text-white md:text-5xl">
           {faqContent.title}
 
-          <span className="block text-[var(--brand-navy)]">
+          <span className="block text-[#f0c77c]">
             {faqContent.highlight}
           </span>
         </h2>
 
-        <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-[var(--text-secondary)]">
+        <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-slate-200">
           {faqContent.description}
         </p>
       </div>
@@ -57,8 +57,8 @@ export function FAQ() {
           </h3>
 
           <p className="mt-6 text-lg leading-8 text-[var(--text-secondary)]">
-            Every business is unique. If your question isn't covered
-            here, we'd be happy to discuss your project, understand your
+            Every business is unique. If your question isn&apos;t covered
+            here, we&apos;d be happy to discuss your project, understand your
             requirements and recommend the most appropriate solution.
           </p>
 

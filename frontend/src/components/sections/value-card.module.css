@@ -1,0 +1,19 @@
+.backFace {
+  transition: border-color 260ms ease, box-shadow 260ms ease;
+}
+
+.backFace:hover,
+.backFace:focus-within {
+  border-color: color-mix(in srgb, var(--value-accent) 68%, rgba(255, 255, 255, 0.12));
+  box-shadow: 0 0 22px color-mix(in srgb, var(--value-accent) 15%, transparent);
+}
+
+.backHeading {
+  color: var(--value-accent);
+  transition: filter 260ms ease;
+}
+
+.backFace:hover .backHeading,
+.backFace:focus-within .backHeading {
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--value-accent) 26%, transparent));
+}

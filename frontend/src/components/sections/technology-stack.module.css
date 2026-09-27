@@ -1,0 +1,24 @@
+.detailArea {
+  border-color: color-mix(in srgb, var(--technology-accent) 34%, transparent);
+  transition: border-color 390ms ease, opacity 520ms ease;
+}
+
+.detailTitle {
+  color: var(--technology-accent);
+  text-shadow: 0 0 16px color-mix(in srgb, var(--technology-accent) 18%, transparent);
+  transition: color 390ms ease, text-shadow 390ms ease;
+}
+
+.stackDivider {
+  border-color: color-mix(in srgb, var(--technology-accent) 38%, transparent);
+  box-shadow: 0 1px 8px color-mix(in srgb, var(--technology-accent) 12%, transparent);
+  transition: border-color 390ms ease, box-shadow 390ms ease;
+}
+
+.checkIcon {
+  border: 1px solid color-mix(in srgb, var(--technology-accent) 42%, transparent);
+  background: color-mix(in srgb, var(--technology-accent) 9%, rgba(5, 12, 30, 0.7));
+  color: var(--technology-accent);
+  box-shadow: 0 0 9px color-mix(in srgb, var(--technology-accent) 12%, transparent);
+  transition: color 390ms ease, border-color 390ms ease, background-color 390ms ease, box-shadow 390ms ease;
+}

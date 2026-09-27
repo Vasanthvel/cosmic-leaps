@@ -8,13 +8,17 @@ import {
 } from "@/data/portfolio";
 
 import { ProjectCard } from "./project-card";
+import { SectionStats, type SectionStat } from "./section-stats";
+
+const portfolioStats: SectionStat[] = [
+  { value: "100%", label: "Custom Development", accent: "#FBBF24" },
+  { value: "AI", label: "Integrated Where Valuable", accent: "#A855F7" },
+  { value: "Scalable", label: "Production Architecture", accent: "#2DD4BF" },
+];
 
 export function Portfolio() {
   return (
-    <Section
-      id="portfolio"
-      className="bg-[rgba(5,11,25,0.10)]"
-    >
+    <Section id="portfolio">
       <div className="mx-auto max-w-3xl text-center">
         <span className="inline-flex rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white/90">
           {portfolioContent.badge}
@@ -42,7 +46,7 @@ export function Portfolio() {
         ))}
       </div>
 
-      <div className="mt-24 rounded-3xl border border-[var(--border)] bg-[var(--brand-navy)] px-8 py-12 text-white shadow-xl">
+      <div className="mt-24 border-t border-white/15 pt-12 text-white">
         <div className="mx-auto max-w-5xl">
           <div className="text-center">
             <h3 className="text-3xl font-bold text-white">
@@ -57,37 +61,10 @@ export function Portfolio() {
             </p>
           </div>
 
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            <div className="rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur">
-              <h4 className="text-3xl font-bold text-white">
-                100%
-              </h4>
-
-              <p className="mt-2 text-white/80">
-                Custom Development
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur">
-              <h4 className="text-3xl font-bold text-white">
-                AI
-              </h4>
-
-              <p className="mt-2 text-white/80">
-                Integrated Where Valuable
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur">
-              <h4 className="text-3xl font-bold text-white">
-                Scalable
-              </h4>
-
-              <p className="mt-2 text-white/80">
-                Production Architecture
-              </p>
-            </div>
-          </div>
+          <SectionStats
+            items={portfolioStats}
+            className="mt-12 grid-cols-1 gap-6 md:grid-cols-3"
+          />
         </div>
       </div>
     </Section>

@@ -1,0 +1,31 @@
+.grid {
+  display: grid;
+  align-items: start;
+}
+
+.item {
+  min-width: 0;
+  text-align: center;
+}
+
+.value {
+  margin: 0;
+  color: var(--section-stat-accent);
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.label {
+  margin: 0.5rem 0 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+@media (min-width: 768px) {
+  .value {
+    font-size: 3rem;
+  }
+}

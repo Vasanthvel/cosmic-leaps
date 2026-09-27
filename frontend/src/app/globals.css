@@ -39,14 +39,6 @@ html {
 }
 
 body {
-  position: relative;
-  isolation: isolate;
-  background-color: #081420;
-  background-image: linear-gradient(rgba(4, 10, 20, 0.45), rgba(4, 10, 20, 0.28)), url("/background.png");
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-attachment: fixed;
   overflow-x: hidden;
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
@@ -54,26 +46,57 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-.cosmic-scene {
+.global-cosmic-background {
   position: fixed;
   inset: 0;
-  width: 100%;
-  height: 100%;
   z-index: 0;
   pointer-events: none;
-  overflow: hidden;
+  background-color: #061124;
+  background-image: linear-gradient(rgba(4, 10, 20, 0.38), rgba(4, 10, 20, 0.46)), url("/background5.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.cosmic-scene canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.site-shell {
+.site-content {
   position: relative;
-  z-index: 20;
+  z-index: 1;
+}
+
+.cosmic-card-icon {
+  color: var(--cosmic-accent);
+  opacity: 0.76;
+  transition: color 260ms ease, opacity 260ms ease, border-color 260ms ease, background-color 260ms ease, box-shadow 260ms ease;
+}
+
+.cosmic-card-icon svg,
+.cosmic-card-inline-icon {
+  transition: color 260ms ease, filter 260ms ease, opacity 260ms ease;
+}
+
+.cosmic-card-hover:is(:hover, :focus-within, [aria-expanded="true"], [aria-pressed="true"], [data-state="open"], :has(details[open])) .cosmic-card-icon {
+  border-color: color-mix(in srgb, var(--cosmic-accent) 68%, rgba(255, 255, 255, 0.12));
+  background-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--cosmic-accent) 18%, transparent), inset 0 0 12px color-mix(in srgb, var(--cosmic-accent) 10%, transparent);
+  opacity: 1;
+}
+
+.cosmic-card-hover:is(:hover, :focus-within, [aria-expanded="true"], [aria-pressed="true"], [data-state="open"], :has(details[open])) .cosmic-card-icon svg,
+.cosmic-card-hover:is(:hover, :focus-within, [aria-expanded="true"], [aria-pressed="true"], [data-state="open"], :has(details[open])) .cosmic-card-inline-icon {
+  color: var(--cosmic-accent);
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--cosmic-accent) 28%, transparent));
+  opacity: 1;
+}
+
+.cosmic-project-title,
+.cosmic-project-category {
+  transition: color 260ms ease, border-color 260ms ease;
+}
+
+.cosmic-card-hover:is(:hover, :focus-within) .cosmic-project-title,
+.cosmic-card-hover:is(:hover, :focus-within) .cosmic-project-category {
+  border-color: color-mix(in srgb, var(--project-accent) 62%, rgba(255, 255, 255, 0.1));
+  color: var(--project-accent);
 }
 
 body,
@@ -105,6 +128,12 @@ header nav a[aria-current="page"] {
 
 section {
   scroll-margin-top: 96px;
+}
+
+@media (max-width: 1023px) {
+  .global-cosmic-background {
+    background-position: 70% center;
+  }
 }
 
 :focus-visible {

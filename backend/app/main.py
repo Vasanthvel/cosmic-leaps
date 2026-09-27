@@ -1,17 +1,20 @@
 import os
 import json
+import logging
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
-from starlette.responses import StreamingResponse
+from starlette.responses import JSONResponse, StreamingResponse
 
 from .ai import AIProviderError, provider
 
 MAX_CONTEXT_MESSAGES = 8
+logger = logging.getLogger(__name__)
+application_name = os.getenv("APP_NAME", "Cosmic Leaps Chat API")
 
 app = FastAPI(
-    title="Analytics Lab API",
+    title=application_name,
     version="1.0.0",
 )
 
@@ -36,7 +39,7 @@ class ChatRequest(BaseModel):
 def root():
     return {
         "status": "ok",
-        "application": "Analytics Lab API",
+        "application": application_name,
         "version": "1.0.0",
     }
 
@@ -46,6 +49,13 @@ def health():
     return {
         "status": "healthy",
     }
+
+
+@app.get("/api/chat/status")
+def chat_status():
+    result = provider.health()
+    status_code = 200 if result["status"] == "ok" else 503
+    return JSONResponse(result, status_code=status_code, headers={"Cache-Control": "no-store"})
 
 
 @app.post("/api/chat")
@@ -62,7 +72,15 @@ async def chat(request: ChatRequest):
                 yield json.dumps({"content": content}) + "\n"
             yield json.dumps({"done": True}) + "\n"
         except AIProviderError:
-            yield json.dumps({"error": "The assistant is unavailable right now. Please try again."}) + "\n"
+            logger.exception("[Chatbot] API stream failed")
+            yield json.dumps(
+                {
+                    "code": "provider_unavailable",
+                    "error": "The AI service is temporarily unavailable. Please try again shortly.",
+                    "ollamaUrl": provider.base_url,
+                    "model": provider.model,
+                }
+            ) + "\n"
 
     return StreamingResponse(
         response_stream(),

@@ -6,13 +6,17 @@ import {
 } from "@/data/development-process";
 
 import { ProcessCard } from "./process-card";
+import { SectionStats, type SectionStat } from "./section-stats";
+
+const processStats: SectionStat[] = [
+  { value: "100%", label: "Transparent Workflow", accent: "#38BDF8" },
+  { value: "Agile", label: "Iterative Delivery", accent: "#A855F7" },
+  { value: "Quality", label: "Engineering Standards", accent: "#FBBF24" },
+];
 
 export function DevelopmentProcess() {
   return (
-    <Section
-      id="development-process"
-      className="bg-[rgba(5,11,25,0.10)]"
-    >
+    <Section id="development-process">
       <div className="mx-auto max-w-3xl text-center">
         <span className="inline-flex rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white/90">
           {developmentProcessContent.badge}
@@ -40,7 +44,7 @@ export function DevelopmentProcess() {
         ))}
       </div>
 
-      <div className="mt-24 rounded-3xl border border-[var(--border)] bg-[var(--brand-navy)] px-8 py-12 text-white shadow-xl">
+      <div className="mt-24 border-t border-white/15 pt-12 text-white">
         <div className="mx-auto max-w-4xl text-center">
           <h3 className="text-3xl font-bold text-white">
             Transparent Development Process
@@ -53,37 +57,10 @@ export function DevelopmentProcess() {
             scalable and production-ready software.
           </p>
 
-          <div className="mt-10 grid gap-6 sm:grid-cols-3">
-            <div>
-              <h4 className="text-3xl font-bold text-white">
-                100%
-              </h4>
-
-              <p className="mt-2 text-white/80">
-                Transparent Workflow
-              </p>
-            </div>
-
-            <div>
-              <h4 className="text-3xl font-bold text-white">
-                Agile
-              </h4>
-
-              <p className="mt-2 text-white/80">
-                Iterative Delivery
-              </p>
-            </div>
-
-            <div>
-              <h4 className="text-3xl font-bold text-white">
-                Quality
-              </h4>
-
-              <p className="mt-2 text-white/80">
-                Engineering Standards
-              </p>
-            </div>
-          </div>
+          <SectionStats
+            items={processStats}
+            className="mt-10 grid-cols-1 gap-6 sm:grid-cols-3"
+          />
         </div>
       </div>
     </Section>

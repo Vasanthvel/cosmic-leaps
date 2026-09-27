@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 
@@ -8,12 +10,23 @@ interface LogoProps {
 
 export function Logo({
   className = "",
-  href = "/",
+  href = "/#hero",
 }: LogoProps) {
   return (
     <Link
       href={href}
       aria-label="Cosmic Leaps Home"
+      onClick={(event) => {
+        if (window.location.pathname !== "/" || window.location.hash !== "#hero") {
+          return;
+        }
+
+        event.preventDefault();
+        document.getElementById("hero")?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }}
       className={`flex flex-shrink-0 items-center transition-transform duration-300 hover:scale-[1.02] ${className}`}
     >
       <Image

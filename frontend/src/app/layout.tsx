@@ -4,7 +4,6 @@ import "./globals.css";
 import { Footer, Navbar } from "@/components/layout";
 import { siteConfig } from "@/config/site";
 import { AnalyticsChat } from "@/components/chat/analytics-chat";
-import { CosmicScene } from "@/components/cosmic/cosmic-scene";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.baseUrl),
@@ -121,10 +120,13 @@ export default function RootLayout({
       lang={siteConfig.language}
       suppressHydrationWarning
     >
-      <body className="relative min-h-screen text-[var(--text-primary)] antialiased">
-        <CosmicScene />
+      <body className="min-h-screen bg-[#061124] text-[var(--text-primary)] antialiased">
+        <div
+          aria-hidden="true"
+          className="global-cosmic-background"
+        />
 
-        <div className="site-shell">
+        <div className="site-content">
           <Navbar />
 
           {children}

@@ -1,0 +1,20 @@
+.faqItem {
+  transition: border-color 260ms ease, box-shadow 260ms ease;
+}
+
+.faqItem:hover,
+.faqItem:focus-within,
+.faqItem[data-state="open"] {
+  border-color: color-mix(in srgb, var(--cosmic-accent) 58%, rgba(255, 255, 255, 0.12));
+  box-shadow: 0 0 18px color-mix(in srgb, var(--cosmic-accent) 14%, transparent);
+}
+
+.question {
+  transition: color 260ms ease;
+}
+
+.faqItem:hover .question,
+.faqItem:focus-within .question,
+.faqItem[data-state="open"] .question {
+  color: var(--cosmic-accent);
+}

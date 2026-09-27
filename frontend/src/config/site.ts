@@ -146,10 +146,6 @@ export const siteConfig = {
       href: "#faq",
     },
 
-    {
-      label: "Contact",
-      href: "#contact",
-    },
   ],
 } as const;
 

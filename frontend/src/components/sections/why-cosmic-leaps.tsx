@@ -7,13 +7,18 @@ import {
 } from "@/data/why-cosmic-leaps";
 
 import { ValueCard } from "./value-card";
+import { SectionStats, type SectionStat } from "./section-stats";
+
+const trustAccents = ["#38BDF8", "#FBBF24", "#A855F7", "#2DD4BF"];
 
 export function WhyCosmicLeaps() {
+  const stats: SectionStat[] = trustIndicators.map((indicator, index) => ({
+    ...indicator,
+    accent: trustAccents[index % trustAccents.length],
+  }));
+
   return (
-    <Section
-      id="why-cosmic-leaps"
-      className="bg-[rgba(5,11,25,0.10)]"
-    >
+    <Section id="why-cosmic-leaps">
       <div className="mx-auto max-w-3xl text-center">
         <span className="inline-flex rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white/90">
           {whyCosmicLeapsData.badge}
@@ -41,22 +46,10 @@ export function WhyCosmicLeaps() {
         ))}
       </div>
 
-      <div className="mt-24 grid grid-cols-2 gap-8 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-10 md:grid-cols-4">
-        {trustIndicators.map((indicator) => (
-          <div
-            key={indicator.label}
-            className="text-center"
-          >
-            <h3 className="text-4xl font-bold text-[var(--brand-navy)]">
-              {indicator.value}
-            </h3>
-
-            <p className="mt-3 text-sm font-medium text-[var(--text-secondary)]">
-              {indicator.label}
-            </p>
-          </div>
-        ))}
-      </div>
+      <SectionStats
+        items={stats}
+        className="mt-24 grid-cols-2 gap-8 border-t border-white/15 pt-10 md:grid-cols-4"
+      />
     </Section>
   );
 }

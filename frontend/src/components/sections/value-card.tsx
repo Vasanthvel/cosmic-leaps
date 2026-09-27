@@ -1,4 +1,5 @@
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import type { CSSProperties } from "react";
 
 import {
   Card,
@@ -8,6 +9,7 @@ import {
 import { ValuePoint } from "@/data/why-cosmic-leaps";
 
 import { FlipCard } from "./flip-card";
+import styles from "./value-card.module.css";
 
 interface ValueCardProps {
   value: ValuePoint;
@@ -17,23 +19,33 @@ export function ValueCard({
   value,
 }: ValueCardProps) {
   const Icon = value.icon;
+  const valueAccents: Record<string, string> = {
+    "custom-solutions": "#35A7FF",
+    "modern-technologies": "#36E0C0",
+    "ai-first": "#B56CFF",
+    analytics: "#36E0C0",
+    "data-processing": "#35A7FF",
+    "long-term": "#F5C76A",
+  };
+  const accent = valueAccents[value.id] ?? "#35A7FF";
 
   return (
     <FlipCard
       front={
-        <Card className="group h-full rounded-2xl border border-[var(--border)] bg-[var(--card)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--brand-navy)] hover:shadow-xl">
+        <Card
+          style={{ "--value-accent": accent, "--cosmic-accent": accent } as CSSProperties}
+          className="group cosmic-card-hover h-full rounded-xl border border-white/12 bg-[rgba(5,12,30,0.58)] text-white shadow-[0_12px_36px_rgba(1,6,20,0.2)] backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-[var(--value-accent)] hover:shadow-[0_0_24px_rgba(53,167,255,0.12)]"
+        >
           <CardContent className="flex h-full flex-col p-8">
             <div
               className="
                 flex h-14 w-14 items-center justify-center
-                rounded-xl
-                bg-[#EEF7EE]
-                text-[var(--brand-green)]
+                rounded-full
+                border border-white/12
+                bg-white/5
+                cosmic-card-icon text-[var(--value-accent)]
                 transition-all
                 duration-300
-                group-hover:scale-110
-                group-hover:bg-[var(--brand-green)]
-                group-hover:text-white
               "
             >
               <Icon className="h-7 w-7 transition-colors duration-300" />
@@ -45,10 +57,10 @@ export function ValueCard({
                   text-3xl
                   font-semibold
                   leading-tight
-                  text-[var(--text-primary)]
+                  text-white
                   transition-colors
                   duration-300
-                  group-hover:text-[var(--brand-navy)]
+                  group-hover:text-[var(--value-accent)]
                 "
               >
                 {value.title}
@@ -60,7 +72,7 @@ export function ValueCard({
                 className="
                   h-6
                   w-6
-                  text-[var(--brand-navy)]
+                  text-[var(--value-accent)]
                   transition-all
                   duration-300
                   group-hover:translate-x-2
@@ -71,22 +83,25 @@ export function ValueCard({
         </Card>
       }
       back={
-        <Card className="h-full rounded-2xl border border-[var(--brand-navy)] bg-[var(--brand-navy)] text-white shadow-xl">
+        <Card
+          style={{ "--value-accent": accent, "--cosmic-accent": accent } as CSSProperties}
+          className={`${styles.backFace} group cosmic-card-hover h-full rounded-xl border border-white/12 bg-[rgba(5,12,30,0.72)] text-white shadow-xl backdrop-blur-md`}
+        >
           <CardContent className="flex h-full flex-col p-8">
-            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white/15">
-              <Icon className="h-7 w-7 text-white" />
+            <div className="cosmic-card-icon flex h-12 w-12 items-center justify-center rounded-full border border-white/12 bg-white/5 text-[var(--value-accent)]">
+              <Icon className="h-6 w-6 text-[var(--value-accent)]" />
             </div>
 
-            <h3 className="mt-8 text-2xl font-semibold leading-tight">
+            <h3 className={`${styles.backHeading} mt-8 text-2xl font-semibold leading-tight`}>
               {value.title}
             </h3>
 
-            <p className="mt-6 flex-1 text-base leading-7 text-white/80">
+            <p className="mt-6 flex-1 text-base leading-7 text-white/75">
               {value.description}
             </p>
 
             <div className="flex justify-end">
-              <ArrowLeft className="h-6 w-6 text-white" />
+              <ArrowLeft className="cosmic-card-inline-icon h-6 w-6 text-[var(--value-accent)]" />
             </div>
           </CardContent>
         </Card>

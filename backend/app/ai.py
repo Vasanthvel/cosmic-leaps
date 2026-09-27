@@ -1,5 +1,6 @@
 import asyncio
 import json
+import logging
 import os
 from collections.abc import AsyncIterator
 from urllib.error import HTTPError, URLError
@@ -8,6 +9,7 @@ from urllib.request import Request, urlopen
 from .knowledge import SYSTEM_INSTRUCTIONS
 
 MAX_CONTEXT_MESSAGES = 8
+logger = logging.getLogger(__name__)
 
 
 class AIProviderError(Exception):
@@ -28,6 +30,38 @@ class OllamaProvider(AIProvider):
         self.model = os.getenv("OLLAMA_MODEL", "llama3.2:3b")
         self.timeout = float(os.getenv("AI_REQUEST_TIMEOUT_SECONDS", "45"))
 
+    def health(self) -> dict[str, str]:
+        endpoint = f"{self.base_url}/api/tags"
+        request = Request(endpoint, headers={"Accept": "application/json"}, method="GET")
+
+        try:
+            with urlopen(request, timeout=min(self.timeout, 4.0)) as response:
+                data = json.loads(response.read())
+        except (HTTPError, URLError, TimeoutError, OSError, json.JSONDecodeError) as error:
+            logger.warning("[Chatbot] Ollama is unavailable: endpoint=%s error=%s", endpoint, error)
+            return {
+                "status": "unavailable",
+                "code": "provider_unavailable",
+                "message": f"Ollama is not reachable at {self.base_url}. Start Ollama and try again.",
+                "ollamaUrl": self.base_url,
+                "model": self.model,
+            }
+
+        available_models = {
+            item.get("name") for item in data.get("models", []) if isinstance(item, dict)
+        }
+        if self.model not in available_models:
+            logger.warning("[Chatbot] Configured Ollama model is missing: model=%s endpoint=%s", self.model, endpoint)
+            return {
+                "status": "unavailable",
+                "code": "model_unavailable",
+                "message": f"Configured Ollama model {self.model} is not installed.",
+                "ollamaUrl": self.base_url,
+                "model": self.model,
+            }
+
+        return {"status": "ok", "provider": "ollama", "ollamaUrl": self.base_url, "model": self.model}
+
     async def complete(self, messages: list[dict[str, str]]) -> str:
         recent_messages = messages[-MAX_CONTEXT_MESSAGES:]
         request = self._build_request(recent_messages, stream=False)
@@ -37,6 +71,7 @@ class OllamaProvider(AIProvider):
             response = json.loads(response_body)
             content = response.get("message", {}).get("content", "").strip()
         except (HTTPError, URLError, TimeoutError, OSError, json.JSONDecodeError) as error:
+            logger.exception("[Chatbot] Ollama request failed: model=%s endpoint=%s", self.model, request.full_url)
             raise AIProviderError("The local AI service is unavailable.") from error
 
         if not content:
@@ -58,6 +93,7 @@ class OllamaProvider(AIProvider):
                             break
                         loop.call_soon_threadsafe(chunks.put_nowait, ("line", line))
             except (HTTPError, URLError, TimeoutError, OSError) as error:
+                logger.exception("[Chatbot] Ollama stream failed: model=%s endpoint=%s", self.model, request.full_url)
                 loop.call_soon_threadsafe(chunks.put_nowait, ("error", AIProviderError("The local AI service is unavailable.")))
             finally:
                 loop.call_soon_threadsafe(chunks.put_nowait, ("done", None))
@@ -99,7 +135,7 @@ class OllamaProvider(AIProvider):
                 "model": self.model,
                 "messages": [{"role": "system", "content": SYSTEM_INSTRUCTIONS}, *messages],
                 "stream": stream,
-                "options": {"temperature": 0.2, "num_predict": 100},
+                "options": {"temperature": 0.2, "num_predict": 500},
             }
         ).encode("utf-8")
         return Request(

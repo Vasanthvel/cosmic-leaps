@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { CSSProperties } from "react";
 
 import {
   ArrowRight,
@@ -22,6 +23,12 @@ export function ProjectCard({
   project,
 }: ProjectCardProps) {
   const Icon = project.icon;
+  const category = project.category.toLowerCase();
+  const accent = category.includes("ai")
+    ? "#B56CFF"
+    : category.includes("analytics")
+      ? "#36E0C0"
+      : "#35A7FF";
 
   const [isOpen, setIsOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(0);
@@ -49,32 +56,33 @@ export function ProjectCard({
   return (
     <Card
       onClick={handleToggle}
-      className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--brand-navy)] hover:shadow-xl"
+      style={{ "--project-accent": accent, "--cosmic-accent": accent } as CSSProperties}
+      className="group cosmic-card-hover flex h-full cursor-pointer flex-col overflow-hidden rounded-xl border border-white/12 bg-[rgba(5,12,30,0.62)] text-white shadow-[0_12px_36px_rgba(1,6,20,0.2)] backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-[var(--project-accent)] hover:shadow-[0_0_28px_rgba(53,167,255,0.12)]"
     >
       <CardContent className="flex h-full flex-col p-8">
         <div className="flex items-center justify-between">
           <div
-            className="flex h-14 w-14 items-center justify-center rounded-xl bg-[#EEF7EE] text-[#4CAF50] transition-all duration-300 group-hover:bg-[#4CAF50] group-hover:text-white"
+            className="cosmic-card-icon flex h-12 w-12 items-center justify-center rounded-full border border-[var(--project-accent)]/35 bg-white/5 text-[var(--project-accent)]"
             aria-hidden="true"
           >
             <Icon className="h-7 w-7" />
           </div>
 
-          <span className="rounded-full bg-[var(--surface)] px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)]">
+          <span className="cosmic-project-category rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white/70">
             {project.category}
           </span>
         </div>
 
-        <h3 className="mt-8 text-2xl font-semibold leading-tight text-[var(--text-primary)]">
+        <h3 className="cosmic-project-title mt-8 text-2xl font-semibold leading-tight text-white">
           {project.title}
         </h3>
 
-        <p className="mt-5 text-base leading-7 text-[var(--text-secondary)]">
+        <p className="mt-5 text-base leading-7 text-white/75">
           {project.description}
         </p>
 
         <div className="mt-8">
-          <h4 className="text-sm font-semibold uppercase tracking-wide text-[var(--text-primary)]">
+          <h4 className="text-sm font-semibold uppercase tracking-wide text-white/85">
             Technologies
           </h4>
 
@@ -82,7 +90,7 @@ export function ProjectCard({
             {project.technologies.map((technology) => (
               <span
                 key={technology.name}
-                className="rounded-full border border-[#E5E7EB] bg-[#F8FAFC] px-3 py-1 text-sm font-medium text-[#1E2A5A] transition-colors duration-300 group-hover:border-[#D1D5DB]"
+                className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-sm font-medium text-white/75 transition-colors duration-300 group-hover:border-white/25"
               >
                 {technology.name}
               </span>
@@ -90,19 +98,19 @@ export function ProjectCard({
           </div>
         </div>
 
-        <div className="mt-8 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5">
+        <div className="mt-8 rounded-xl border border-white/10 bg-white/5 p-5">
           <div className="flex items-start gap-3">
             <CheckCircle2
               aria-hidden="true"
-              className="mt-0.5 h-5 w-5 flex-shrink-0 text-[var(--brand-green)]"
+              className="mt-0.5 h-5 w-5 flex-shrink-0 text-[var(--project-accent)]"
             />
 
             <div className="w-full">
-              <h4 className="font-semibold text-[var(--text-primary)]">
+              <h4 className="font-semibold text-white">
                 Business Outcome
               </h4>
 
-              <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
+              <p className="mt-2 text-sm leading-6 text-white/70">
                 {project.outcome}
               </p>
 
@@ -114,21 +122,21 @@ export function ProjectCard({
                 }`}
               >
                 <div className="overflow-hidden">
-                  <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--text-muted)]">
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-white/60">
                     How It Was Achieved
                   </p>
 
-                  <ul className="space-y-2 border-t border-[var(--border)] pt-3">
+                  <ul className="space-y-2 border-t border-white/10 pt-3">
                     {project.approach.map((step, index) => (
                       <li
                         key={step}
-                        className={`flex items-start gap-2 text-sm leading-6 text-[var(--text-secondary)] transition-all duration-300 ease-out ${
+                        className={`flex items-start gap-2 text-sm leading-6 text-white/75 transition-all duration-300 ease-out ${
                           index < visibleCount
                             ? "translate-y-0 opacity-100"
                             : "translate-y-2 opacity-0"
                         }`}
                       >
-                        <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#4CAF50]" />
+                        <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[var(--project-accent)]" />
 
                         <span>{step}</span>
                       </li>
@@ -144,20 +152,20 @@ export function ProjectCard({
           {project.metrics.map((metric) => (
             <div
               key={metric.label}
-              className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-4 text-center transition-all duration-300 group-hover:border-[var(--brand-navy)]"
+              className="rounded-lg border border-white/10 bg-white/5 p-4 text-center transition-all duration-300 group-hover:border-[var(--project-accent)]/45"
             >
-              <p className="text-lg font-bold text-[var(--brand-navy)]">
+              <p className="text-lg font-bold text-[var(--project-accent)]">
                 {metric.value}
               </p>
 
-              <p className="mt-1 text-xs font-medium uppercase tracking-wide text-[var(--text-muted)]">
+              <p className="mt-1 text-xs font-medium uppercase tracking-wide text-white/55">
                 {metric.label}
               </p>
             </div>
           ))}
         </div>
 
-        <div className="mt-8 flex items-center gap-2 text-sm font-semibold text-[var(--brand-navy)] transition-all duration-300 group-hover:gap-3">
+        <div className="mt-8 flex items-center gap-2 text-sm font-semibold text-[var(--project-accent)] transition-all duration-300 group-hover:gap-3">
           <span>See How It Works</span>
 
           <ArrowRight

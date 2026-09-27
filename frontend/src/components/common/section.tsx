@@ -25,7 +25,7 @@ export function Section({
     <section
       id={id}
       className={cn(
-        "relative bg-transparent py-16 sm:py-20 lg:py-24",
+        "py-16 sm:py-20 lg:py-24",
         className
       )}
       {...props}

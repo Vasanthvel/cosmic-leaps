@@ -2,17 +2,16 @@ import { Section } from "@/components/common";
 import { services } from "@/data/services";
 
 import { ServiceCard } from "./service-card";
+import styles from "./services.module.css";
 
 export function Services() {
   return (
     <Section
       id="services"
-      className="bg-[rgba(5,11,25,0.12)]"
+      className={styles.section}
     >
       <div className="mx-auto max-w-3xl text-center">
-        <span className="inline-flex rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white/90">
-          Our Services
-        </span>
+        <span className={styles.kicker}>Our Services</span>
 
         <h2 className="mt-6 text-4xl font-bold tracking-tight text-white md:text-5xl">
           Software Solutions
@@ -28,11 +27,12 @@ export function Services() {
         </p>
       </div>
 
-      <div className="mt-20 grid gap-8 lg:grid-cols-3">
-        {services.map((service) => (
+      <div className={styles.serviceCards}>
+        {services.map((service, index) => (
           <ServiceCard
             key={service.id}
             service={service}
+            position={index}
           />
         ))}
       </div>

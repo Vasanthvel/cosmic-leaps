@@ -12,6 +12,7 @@ export function Hero() {
   return (
     <Section
       id="hero"
+      style={{ scrollMarginTop: "7rem" }}
       className="relative overflow-hidden pt-24 pb-28"
     >
       <HeroBackground />
@@ -37,7 +38,7 @@ export function Hero() {
           <Link href={heroData.primaryButton.href}>
             <Button
               size="lg"
-              className="!border-[1.5px] !border-[var(--brand-navy)] !bg-white !text-[var(--brand-navy)] shadow-[0_8px_20px_rgba(30,42,90,0.12)] transition-all duration-300 ease-out hover:!-translate-y-0.5 hover:!border-[var(--brand-green)] hover:!bg-[var(--brand-green)] hover:!text-white hover:shadow-[0_12px_24px_rgba(76,175,80,0.22)] active:scale-[0.98]"
+              className="!border-[1.5px] !border-white/35 !bg-[rgba(8,14,32,0.34)] !text-white shadow-[0_8px_20px_rgba(1,6,20,0.16)] backdrop-blur-sm transition-all duration-300 ease-out hover:!-translate-y-0.5 hover:!border-[#F5C76A] hover:!bg-white/12 hover:!text-[#F5C76A] hover:shadow-[0_0_22px_rgba(245,199,106,0.18)] active:scale-[0.98]"
             >
               {heroData.primaryButton.label}
             </Button>
@@ -47,7 +48,7 @@ export function Hero() {
             <Button
               variant="outline"
               size="lg"
-              className="!border-[1.5px] !border-[var(--brand-navy)] !bg-white !text-[var(--brand-navy)] shadow-[0_8px_20px_rgba(30,42,90,0.12)] transition-all duration-300 ease-out hover:!-translate-y-0.5 hover:!border-[var(--brand-green)] hover:!bg-[var(--brand-green)] hover:!text-white hover:shadow-[0_12px_24px_rgba(76,175,80,0.22)] active:scale-[0.98]"
+              className="!border-[1.5px] !border-white/35 !bg-[rgba(8,14,32,0.34)] !text-white shadow-[0_8px_20px_rgba(1,6,20,0.16)] backdrop-blur-sm transition-all duration-300 ease-out hover:!-translate-y-0.5 hover:!border-[#38BDF8] hover:!bg-white/12 hover:!text-[#38BDF8] hover:shadow-[0_0_22px_rgba(56,189,248,0.18)] active:scale-[0.98]"
             >
               {heroData.secondaryButton.label}
             </Button>

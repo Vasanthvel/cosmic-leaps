@@ -1,4 +1,4 @@
-# Analytics Lab Backend
+# Cosmic Leaps Chat Backend
 
 ## Activate Environment
 
@@ -16,7 +16,17 @@ From PowerShell, run `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 pip install -r requirements.txt
 ```
 
-## Run
+## Run the Full Development Stack
+
+From the repository root, run:
+
+```bash
+npm run dev
+```
+
+This starts Next.js and FastAPI together and checks whether Ollama and the configured model are available. It does not start Ollama; start Ollama separately if the development command reports it is unavailable.
+
+## Run the Backend Alone
 
 ```bash
 uvicorn app.main:app --reload
@@ -34,5 +44,5 @@ ollama serve
 
 Run the API from the `backend` directory. The API calls Ollama locally at
 `http://127.0.0.1:11434`. Optional environment variables are `OLLAMA_BASE_URL`,
-`OLLAMA_MODEL`, and `AI_REQUEST_TIMEOUT_SECONDS`. The frontend can point at the API
-with `NEXT_PUBLIC_ANALYTICS_API_URL` (default: `http://127.0.0.1:8000`).
+`OLLAMA_MODEL`, and `AI_REQUEST_TIMEOUT_SECONDS`. The Next.js chat proxy uses
+`BACKEND_URL` (default: `http://127.0.0.1:8000`).

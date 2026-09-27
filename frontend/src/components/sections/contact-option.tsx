@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { CSSProperties } from "react";
 
 import { Card, CardContent } from "@/components/ui";
 import { ContactOption as ContactOptionType } from "@/data/contact-cta";
@@ -11,31 +12,35 @@ export function ContactOption({
   option,
 }: ContactOptionProps) {
   const Icon = option.icon;
+  const accent = option.title === "Phone" ? "#B56CFF" : option.title === "Location" ? "#36E0C0" : option.title === "Response Time" ? "#F5C76A" : "#35A7FF";
 
   return (
-    <Card className="group h-full border border-[var(--border)] bg-[var(--card)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--brand-navy)] hover:shadow-lg">
+    <Card
+      style={{ "--contact-accent": accent, "--cosmic-accent": accent } as CSSProperties}
+      className="group cosmic-card-hover h-full rounded-xl border border-white/12 bg-[rgba(5,12,30,0.58)] text-white shadow-[0_12px_36px_rgba(1,6,20,0.2)] backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-[var(--contact-accent)] hover:shadow-[0_0_24px_rgba(53,167,255,0.12)]"
+    >
       <CardContent className="flex items-start gap-4 p-6">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#EEF7EE] text-[var(--brand-green)] transition-colors duration-300 group-hover:bg-[var(--brand-green)] group-hover:text-white">
+        <div className="cosmic-card-icon flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/12 bg-white/5 text-[var(--contact-accent)]">
           <Icon className="h-6 w-6" />
         </div>
 
         <div className="min-w-0 flex-1">
-          <h3 className="font-semibold text-[var(--text-primary)]">
+          <h3 className="font-semibold text-white">
             {option.title}
           </h3>
 
-          <p className="mt-1 text-sm text-[var(--text-muted)]">
+          <p className="mt-1 text-sm text-white/60">
             {option.description}
           </p>
 
           {option.href === "#" ? (
-            <p className="mt-3 break-words font-medium text-[var(--text-primary)]">
+            <p className="mt-3 break-words font-medium text-white">
               {option.value}
             </p>
           ) : (
             <Link
               href={option.href}
-              className="mt-3 block break-words font-medium text-[var(--brand-navy)] transition-colors hover:text-[var(--brand-green)]"
+              className="mt-3 block break-words font-medium text-white transition-colors hover:text-[var(--contact-accent)]"
             >
               {option.value}
             </Link>

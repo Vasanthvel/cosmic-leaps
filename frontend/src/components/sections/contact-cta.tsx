@@ -9,12 +9,8 @@ import { ContactOption } from "./contact-option";
 
 export function ContactCTA() {
   return (
-    <Section
-      id="contact"
-      className="bg-[rgba(5,11,25,0.10)]"
-    >
-      <div className="overflow-hidden rounded-3xl border border-[#E5E7EB] bg-[#1E2A5A] shadow-[0_24px_60px_rgba(17,24,39,0.08)]">
-        <div className="px-8 py-16 lg:px-16">
+    <Section id="contact">
+      <div className="mx-auto max-w-6xl">
           <div className="mx-auto max-w-3xl text-center">
             <span className="inline-flex rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-white/90">
               {contactCTA.badge}
@@ -32,7 +28,7 @@ export function ContactCTA() {
               <Link href={contactCTA.primaryButton.href}>
                 <Button
                   size="lg"
-                  className="min-w-[240px] !border-[1.5px] !border-[var(--brand-navy)] !bg-white !text-[var(--brand-navy)] shadow-[0_8px_20px_rgba(30,42,90,0.12)] transition-all duration-300 ease-out hover:!-translate-y-0.5 hover:!border-[var(--brand-green)] hover:!bg-[var(--brand-green)] hover:!text-white hover:shadow-[0_12px_24px_rgba(76,175,80,0.22)] active:scale-[0.98]"
+                  className="min-w-[240px] !border-white/30 !bg-[rgba(5,12,30,0.54)] !text-white shadow-[0_8px_24px_rgba(1,6,20,0.2)] backdrop-blur-sm transition-all duration-300 ease-out hover:!-translate-y-0.5 hover:!border-[#F5C76A] hover:!bg-white/10 hover:!text-[#F5C76A] hover:shadow-[0_0_22px_rgba(245,199,106,0.18)] active:scale-[0.98]"
                 >
                   {contactCTA.primaryButton.label}
                 </Button>
@@ -42,7 +38,7 @@ export function ContactCTA() {
                 <Button
                   variant="outline"
                   size="lg"
-                  className="min-w-[240px] !border-[1.5px] !border-[var(--brand-navy)] !bg-white !text-[var(--brand-navy)] shadow-[0_8px_20px_rgba(30,42,90,0.12)] transition-all duration-300 ease-out hover:!-translate-y-0.5 hover:!border-[var(--brand-green)] hover:!bg-[var(--brand-green)] hover:!text-white hover:shadow-[0_12px_24px_rgba(76,175,80,0.22)] active:scale-[0.98]"
+                  className="min-w-[240px] !border-white/30 !bg-[rgba(5,12,30,0.54)] !text-white shadow-[0_8px_24px_rgba(1,6,20,0.2)] backdrop-blur-sm transition-all duration-300 ease-out hover:!-translate-y-0.5 hover:!border-[#35A7FF] hover:!bg-white/10 hover:!text-[#35A7FF] hover:shadow-[0_0_22px_rgba(53,167,255,0.18)] active:scale-[0.98]"
                 >
                   {contactCTA.secondaryButton.label}
                 </Button>
@@ -58,7 +54,6 @@ export function ContactCTA() {
               />
             ))}
           </div>
-        </div>
       </div>
     </Section>
   );

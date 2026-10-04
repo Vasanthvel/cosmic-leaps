@@ -1,17 +1,40 @@
-const backendUrl = (process.env.BACKEND_URL || "http://127.0.0.1:8000").replace(/\/+$/, "");
+function getBackendUrl() {
+  const configuredUrl = process.env.BACKEND_URL?.trim();
+  if (configuredUrl) {
+    const normalizedUrl = configuredUrl.replace(/\/+$/, "");
+    if (process.env.NODE_ENV !== "production") return normalizedUrl;
 
-function backendUnavailable() {
+    try {
+      const { hostname, protocol } = new URL(normalizedUrl);
+      const isLocalhost =
+        hostname === "localhost" ||
+        hostname.endsWith(".localhost") ||
+        hostname.startsWith("127.") ||
+        hostname === "::1" ||
+        hostname === "[::1]";
+      return protocol === "https:" && !isLocalhost ? normalizedUrl : null;
+    } catch {
+      return null;
+    }
+  }
+  if (process.env.NODE_ENV === "development") return "http://127.0.0.1:8000";
+  return null;
+}
+
+function backendUnavailable(code = "backend_unavailable") {
   return Response.json(
     {
-      code: "backend_unavailable",
-      message: `FastAPI backend is unavailable at ${backendUrl}.`,
-      endpoint: backendUrl,
+      code,
+      message: "The Cosmic Leaps assistant is temporarily unavailable.",
     },
     { status: 503, headers: { "Cache-Control": "no-store" } }
   );
 }
 
 export async function GET() {
+  const backendUrl = getBackendUrl();
+  if (!backendUrl) return backendUnavailable("backend_not_configured");
+
   try {
     const healthResponse = await fetch(`${backendUrl}/health`, {
       cache: "no-store",
@@ -21,7 +44,6 @@ export async function GET() {
     if (!healthResponse.ok) {
       console.error("[Chatbot] FastAPI health check failed", {
         status: healthResponse.status,
-        endpoint: `${backendUrl}/health`,
       });
       return backendUnavailable();
     }
@@ -33,15 +55,16 @@ export async function GET() {
     const providerStatus = await providerResponse.json().catch(() => ({}));
 
     return Response.json(
-      { ...providerStatus, backendUrl },
       {
-        status: providerResponse.status,
-        headers: { "Cache-Control": "no-store" },
-      }
+        status: providerStatus.status,
+        code: providerStatus.code,
+        message: providerStatus.message,
+        provider: providerStatus.provider,
+      },
+      { status: providerResponse.status, headers: { "Cache-Control": "no-store" } }
     );
   } catch (error) {
     console.error("[Chatbot] FastAPI backend is unavailable", {
-      endpoint: backendUrl,
       error: error instanceof Error ? error.message : String(error),
     });
     return backendUnavailable();
@@ -49,6 +72,9 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const backendUrl = getBackendUrl();
+  if (!backendUrl) return backendUnavailable("backend_not_configured");
+
   try {
     const response = await fetch(`${backendUrl}/api/chat`, {
       method: "POST",
@@ -57,6 +83,7 @@ export async function POST(request: Request) {
       },
       body: await request.arrayBuffer(),
       cache: "no-store",
+      signal: AbortSignal.timeout(55_000),
     });
 
     return new Response(response.body, {
@@ -68,7 +95,6 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error("[Chatbot] FastAPI chat request failed", {
-      endpoint: `${backendUrl}/api/chat`,
       error: error instanceof Error ? error.message : String(error),
     });
     return backendUnavailable();

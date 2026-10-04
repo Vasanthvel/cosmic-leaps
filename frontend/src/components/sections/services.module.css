@@ -18,6 +18,9 @@
 
 .serviceCards {
   display: grid;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   grid-template-columns: minmax(0, 1fr);
   align-items: stretch;
   gap: 2rem;
@@ -27,8 +30,11 @@
 .serviceCard {
   position: relative;
   display: flex;
+  box-sizing: border-box;
   width: 100%;
+  max-width: 100%;
   height: 100%;
+  min-width: 0;
   min-height: 252px;
   flex-direction: column;
   border: 1px solid rgba(255, 255, 255, 0.14);
@@ -51,12 +57,14 @@
 
 .cardTopline {
   display: flex;
+  min-width: 0;
   align-items: center;
   justify-content: space-between;
 }
 
 .iconRing {
   display: grid;
+  flex-shrink: 0;
   width: 46px;
   height: 46px;
   place-items: center;
@@ -95,12 +103,15 @@
   position: relative;
   width: fit-content;
   max-width: 100%;
+  min-width: 0;
   margin-top: 1.05rem;
   padding-bottom: 0.65rem;
   color: #fff;
   font-size: 1.2rem;
   font-weight: 650;
   line-height: 1.3;
+  overflow-wrap: anywhere;
+  word-break: normal;
   transition: color 260ms ease;
 }
 
@@ -129,30 +140,48 @@
 }
 
 .shortDescription {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   margin-top: 0.3rem;
   color: rgba(230, 239, 255, 0.78);
   font-size: 0.88rem;
   line-height: 1.6;
+  overflow-wrap: anywhere;
+  word-break: normal;
 }
 
 .fullDescription {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   margin-top: 0.95rem;
   color: rgba(230, 239, 255, 0.76);
   font-size: 0.82rem;
   line-height: 1.65;
+  overflow-wrap: anywhere;
+  word-break: normal;
 }
 
 .solutionsHeading {
+  max-width: 100%;
+  min-width: 0;
   margin-top: 0.9rem;
   color: rgba(255, 255, 255, 0.92);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.09em;
   text-transform: uppercase;
+  overflow-wrap: anywhere;
+  word-break: normal;
 }
 
 .solutionList {
   display: grid;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.5rem 0.8rem;
   margin-top: 0.55rem;
@@ -165,7 +194,11 @@
 
 .solutionList li {
   position: relative;
+  max-width: 100%;
+  min-width: 0;
   padding-left: 0.8rem;
+  overflow-wrap: anywhere;
+  word-break: normal;
 }
 
 .solutionList li::before {
@@ -182,6 +215,12 @@
 @media (min-width: 640px) {
   .serviceCards {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1279px) {
+  .serviceCard:nth-child(3) {
+    grid-column: 1 / -1;
   }
 }
 

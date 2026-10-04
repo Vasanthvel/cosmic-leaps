@@ -40,7 +40,7 @@ export const siteConfig = {
 
   favicon: "/favicon.png",
 
-  appleTouchIcon: "/apple-touch-icon.png",
+  appleTouchIcon: "/favicon.png",
 
   manifest: "/manifest.webmanifest",
 

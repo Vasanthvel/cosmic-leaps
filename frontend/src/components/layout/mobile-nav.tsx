@@ -32,7 +32,7 @@ export function MobileNav() {
         <Dialog.Portal>
           <Dialog.Overlay className="fixed inset-0 z-[80] bg-slate-950/55 backdrop-blur-[2px]" />
 
-          <Dialog.Content className="fixed right-3 top-3 z-[90] flex h-[calc(100vh-1.5rem)] w-[min(88vw,22rem)] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[rgba(6,12,24,0.97)] shadow-[0_24px_80px_rgba(2,6,23,0.72)]">
+          <Dialog.Content className="fixed right-5 top-3 z-[90] flex h-[calc(100vh-1.5rem)] w-[calc(100%_-_2.5rem)] max-w-[22rem] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[rgba(6,12,24,0.97)] shadow-[0_24px_80px_rgba(2,6,23,0.72)] sm:right-3 sm:w-[min(88vw,22rem)]">
             <div className="flex items-center justify-between border-b border-white/10 px-4 py-4">
               <Logo className="max-w-[160px]" />
 

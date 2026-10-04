@@ -4,6 +4,7 @@ import logging
 import os
 from collections.abc import AsyncIterator
 from urllib.error import HTTPError, URLError
+from urllib.parse import urlsplit
 from urllib.request import Request, urlopen
 
 from .knowledge import SYSTEM_INSTRUCTIONS
@@ -12,11 +13,29 @@ MAX_CONTEXT_MESSAGES = 8
 logger = logging.getLogger(__name__)
 
 
+def _is_safe_production_url(url: str) -> bool:
+    try:
+        parsed_url = urlsplit(url)
+    except ValueError:
+        return False
+    hostname = parsed_url.hostname or ""
+    is_localhost = (
+        hostname == "localhost"
+        or hostname.endswith(".localhost")
+        or hostname.startswith("127.")
+        or hostname == "::1"
+    )
+    return parsed_url.scheme == "https" and not is_localhost
+
+
 class AIProviderError(Exception):
     """A user-safe error from the configured AI provider."""
 
 
 class AIProvider:
+    def health(self) -> dict[str, str]:
+        raise NotImplementedError
+
     async def complete(self, messages: list[dict[str, str]]) -> str:
         raise NotImplementedError
 
@@ -150,4 +169,158 @@ class OllamaProvider(AIProvider):
             return response.read()
 
 
-provider = OllamaProvider()
+class OpenAICompatibleProvider(AIProvider):
+    def __init__(self) -> None:
+        self.api_url = os.getenv("AI_API_URL", "").strip()
+        self.api_key = os.getenv("AI_API_KEY", "").strip()
+        self.model = os.getenv("AI_MODEL", "").strip()
+        self.timeout = float(os.getenv("AI_REQUEST_TIMEOUT_SECONDS", "45"))
+
+    def health(self) -> dict[str, str]:
+        if not self.api_url or not self.model:
+            return {
+                "status": "unavailable",
+                "code": "provider_not_configured",
+                "message": "The hosted AI provider is not configured.",
+            }
+        return {"status": "ok", "provider": "openai-compatible", "model": self.model}
+
+    async def complete(self, messages: list[dict[str, str]]) -> str:
+        request = self._build_request(messages[-MAX_CONTEXT_MESSAGES:], stream=False)
+        try:
+            response = json.loads(await asyncio.to_thread(self._request, request))
+        except (HTTPError, URLError, TimeoutError, OSError, json.JSONDecodeError) as error:
+            logger.warning("[Chatbot] Hosted AI request failed: %s", type(error).__name__)
+            raise AIProviderError("The hosted AI service is unavailable.") from error
+
+        content = self._response_content(response)
+        if not content:
+            raise AIProviderError("The AI service returned an empty response.")
+        return content
+
+    async def stream(self, messages: list[dict[str, str]]) -> AsyncIterator[str]:
+        request = self._build_request(messages[-MAX_CONTEXT_MESSAGES:], stream=True)
+        loop = asyncio.get_running_loop()
+        chunks: asyncio.Queue[tuple[str, object | None]] = asyncio.Queue()
+        stop_event = asyncio.Event()
+
+        def read_stream() -> None:
+            try:
+                with urlopen(request, timeout=self.timeout) as response:
+                    for line in response:
+                        if stop_event.is_set():
+                            break
+                        if not line.startswith(b"data:"):
+                            continue
+                        data = line[5:].strip()
+                        if data == b"[DONE]":
+                            break
+                        try:
+                            event = json.loads(data)
+                            if event.get("error"):
+                                raise AIProviderError("The hosted AI service returned an error.")
+                            choices = event.get("choices", [])
+                            content = choices[0].get("delta", {}).get("content", "") if choices else ""
+                            if content:
+                                loop.call_soon_threadsafe(chunks.put_nowait, ("content", content))
+                        except (UnicodeDecodeError, json.JSONDecodeError, AttributeError, IndexError, TypeError) as error:
+                            raise AIProviderError("The AI service returned an invalid response.") from error
+            except AIProviderError as error:
+                loop.call_soon_threadsafe(chunks.put_nowait, ("error", error))
+            except (HTTPError, URLError, TimeoutError, OSError) as error:
+                logger.warning("[Chatbot] Hosted AI stream failed: %s", type(error).__name__)
+                loop.call_soon_threadsafe(
+                    chunks.put_nowait,
+                    ("error", AIProviderError("The hosted AI service is unavailable.")),
+                )
+            finally:
+                loop.call_soon_threadsafe(chunks.put_nowait, ("done", None))
+
+        worker = asyncio.create_task(asyncio.to_thread(read_stream))
+        emitted = False
+        try:
+            while True:
+                kind, value = await chunks.get()
+                if kind == "error":
+                    raise value  # type: ignore[misc]
+                if kind == "done":
+                    break
+                emitted = True
+                yield str(value)
+
+            if not emitted:
+                raise AIProviderError("The AI service returned an empty response.")
+        finally:
+            stop_event.set()
+            if not worker.done():
+                worker.cancel()
+
+    def _build_request(self, messages: list[dict[str, str]], *, stream: bool) -> Request:
+        if not self.api_url or not self.model:
+            raise AIProviderError("The hosted AI provider is not configured.")
+
+        payload = json.dumps(
+            {
+                "model": self.model,
+                "messages": [{"role": "system", "content": SYSTEM_INSTRUCTIONS}, *messages],
+                "stream": stream,
+                "temperature": 0.2,
+                "max_tokens": 500,
+            }
+        ).encode("utf-8")
+        headers = {"Content-Type": "application/json", "Accept": "text/event-stream" if stream else "application/json"}
+        if self.api_key:
+            headers["Authorization"] = f"Bearer {self.api_key}"
+        return Request(self.api_url, data=payload, headers=headers, method="POST")
+
+    def _request(self, request: Request) -> bytes:
+        with urlopen(request, timeout=self.timeout) as response:
+            return response.read()
+
+    def _response_content(self, response: dict[str, object]) -> str:
+        try:
+            choices = response["choices"]
+            message = choices[0]["message"]  # type: ignore[index]
+            content = message["content"]  # type: ignore[index]
+        except (KeyError, IndexError, TypeError) as error:
+            raise AIProviderError("The AI service returned an invalid response.") from error
+        if not isinstance(content, str):
+            raise AIProviderError("The AI service returned an invalid response.")
+        return content.strip()
+
+
+class UnavailableProvider(AIProvider):
+    def health(self) -> dict[str, str]:
+        return {
+            "status": "unavailable",
+            "code": "provider_not_configured",
+            "message": "The Cosmic Leaps AI provider is not configured.",
+        }
+
+    async def complete(self, messages: list[dict[str, str]]) -> str:
+        raise AIProviderError("The Cosmic Leaps AI provider is not configured.")
+
+    async def stream(self, messages: list[dict[str, str]]) -> AsyncIterator[str]:
+        if False:
+            yield ""
+        raise AIProviderError("The Cosmic Leaps AI provider is not configured.")
+
+
+def create_provider() -> AIProvider:
+    provider_name = os.getenv("AI_PROVIDER", "").strip().lower()
+    api_url = os.getenv("AI_API_URL", "").strip()
+    environment = os.getenv("ENVIRONMENT", "").strip().lower()
+    is_production = environment in {"prod", "production"} or os.getenv("VERCEL") == "1"
+
+    if api_url and is_production and not _is_safe_production_url(api_url):
+        return UnavailableProvider()
+    if api_url or provider_name in {"openai", "openai-compatible", "openai_compatible"}:
+        return OpenAICompatibleProvider()
+    if provider_name not in {"", "ollama"} or is_production:
+        return UnavailableProvider()
+    if provider_name == "ollama" or environment in {"dev", "development", "local"}:
+        return OllamaProvider()
+    return UnavailableProvider()
+
+
+provider = create_provider()

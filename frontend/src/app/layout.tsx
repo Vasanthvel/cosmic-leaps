@@ -89,14 +89,6 @@ export const metadata: Metadata = {
     images: [siteConfig.openGraph.image],
   },
 
-  icons: {
-    icon: siteConfig.favicon,
-
-    apple: siteConfig.appleTouchIcon,
-
-    shortcut: siteConfig.favicon,
-  },
-
   manifest: siteConfig.manifest,
 };
 

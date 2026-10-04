@@ -19,7 +19,7 @@ const portfolioStats: SectionStat[] = [
 export function Portfolio() {
   return (
     <Section id="portfolio">
-      <div className="mx-auto max-w-3xl text-center">
+      <div className="mx-auto w-full min-w-0 max-w-3xl text-center">
         <span className="inline-flex rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white/90">
           {portfolioContent.badge}
         </span>
@@ -37,7 +37,7 @@ export function Portfolio() {
         </p>
       </div>
 
-      <div className="mt-20 grid gap-8 lg:grid-cols-2">
+      <div className="mt-20 grid w-full min-w-0 max-w-full gap-8 lg:grid-cols-2">
         {portfolioProjects.map((project) => (
           <ProjectCard
             key={project.id}

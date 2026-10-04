@@ -71,14 +71,12 @@ async def chat(request: ChatRequest):
             async for content in provider.stream(messages):
                 yield json.dumps({"content": content}) + "\n"
             yield json.dumps({"done": True}) + "\n"
-        except AIProviderError:
-            logger.exception("[Chatbot] API stream failed")
+        except AIProviderError as error:
+            logger.warning("[Chatbot] API stream failed: %s", error)
             yield json.dumps(
                 {
                     "code": "provider_unavailable",
-                    "error": "The AI service is temporarily unavailable. Please try again shortly.",
-                    "ollamaUrl": provider.base_url,
-                    "model": provider.model,
+                    "error": "The Cosmic Leaps assistant is temporarily unavailable.",
                 }
             ) + "\n"
 

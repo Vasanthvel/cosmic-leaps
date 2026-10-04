@@ -10,7 +10,7 @@ import { ContactOption } from "./contact-option";
 export function ContactCTA() {
   return (
     <Section id="contact">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto w-full min-w-0 max-w-6xl">
           <div className="mx-auto max-w-3xl text-center">
             <span className="inline-flex rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-white/90">
               {contactCTA.badge}
@@ -46,7 +46,7 @@ export function ContactCTA() {
             </div>
           </div>
 
-          <div className="mt-16 grid gap-8 lg:grid-cols-2">
+          <div className="mt-16 grid w-full min-w-0 max-w-full gap-8 lg:grid-cols-2">
             {contactCTA.contactOptions.map((option) => (
               <ContactOption
                 key={option.title}
